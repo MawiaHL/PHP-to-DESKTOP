@@ -1,0 +1,87 @@
+; Example MySQL config file for medium systems.
+; In this file, you can use all long options that a program supports.
+; If you want to know which options a program supports, run the program
+; with the "--help" option.
+; The following options will be passed to all MySQL clients
+[client]
+;password = your_password
+port = !HLSQLPORT!
+socket = /tmp/mysql.sock
+
+; The MySQL server
+[mysqld]
+console
+;skip-grant-tables
+port = !HLSQLPORT!
+socket = /tmp/mysql.sock
+key_buffer_size = 64M
+max_allowed_packet = 1M
+
+;Added to reduce memory used (minimum is 400)
+table_definition_cache = 600
+
+sort_buffer_size = 2M
+net_buffer_length = 8K
+read_buffer_size = 2M
+read_rnd_buffer_size = 2M
+myisam_sort_buffer_size = 32M
+bind-address = !HLSQLADDRESS! 
+
+log_error_verbosity=2
+
+;To avoid warning messages
+secure_file_priv="!HLPATH!/hldb/tmp"
+skip-ssl
+explicit_defaults_for_timestamp=true
+; Set the SQL mode to strict
+;sql-mode=""
+sql-mode="STRICT_ALL_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ZERO_DATE,NO_ZERO_IN_DATE,NO_AUTO_CREATE_USER"
+
+; Disable Federated by default
+skip-federated
+server-id = 1
+skip-slave-start
+log-bin=bin.log
+log-bin-index=bin-log.index
+max_binlog_size=100M
+binlog_format=row
+socket=mysql.sock
+log_error = "mysql_error.log"
+pid_file = "mysql.pid"
+
+early-plugin-load=""
+;innodb_data_home_dir = C:/mysql/data/
+innodb_data_file_path = ibdata1:12M:autoextend
+;innodb_log_group_home_dir = C:/mysql/data/
+;innodb_log_arch_dir = C:/mysql/data/
+; You can set .._buffer_pool_size up to 50 - 80 %
+; of RAM but beware of setting memory usage too high
+innodb_buffer_pool_size = 16M
+; Set .._log_file_size to 25 % of buffer pool size
+innodb_log_file_size = 5M
+innodb_log_buffer_size = 8M
+innodb_flush_log_at_trx_commit = 1
+innodb_lock_wait_timeout = 50
+innodb_flush_method=normal
+
+[mysqldump]
+quick
+max_allowed_packet = 100M
+
+[mysql]
+no-auto-rehash
+
+[isamchk]
+key_buffer_size = 20M
+sort_buffer_size = 20M
+read_buffer_size = 2M
+write_buffer_size = 2M
+
+[myisamchk]
+key_buffer_size = 20M
+sort_buffer_size_size = 20M
+read_buffer_size = 2M
+write_buffer_size = 2M
+
+[mysqlhotcopy]
+interactive-timeout
